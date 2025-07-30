@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+
 const App = () => {
   const [activeTab, setActiveTab] = useState('trade');
   const [currencies, setCurrencies] = useState([
@@ -43,12 +44,15 @@ const App = () => {
   const [activeView, setActiveView] = useState('list');
   const [isFetching, setIsFetching] = useState(false);
   const fetchInterval = useRef(null);
+  
   // Константа комиссии платформы (0.5%)
   const PLATFORM_FEE_PERCENTAGE = 0.005;
+  
   // Функция для расчета комиссии платформы
   const calculatePlatformFee = (amount) => {
     return amount * PLATFORM_FEE_PERCENTAGE;
   };
+  
   // Новые состояния для раздела "Кошелёк"
   const [walletForm, setWalletForm] = useState({
     receive: { currency: '' },
@@ -62,6 +66,7 @@ const App = () => {
   const [userBalances, setUserBalances] = useState({});
   const [selectedNetwork, setSelectedNetwork] = useState('');
   const receiveAddressRef = useRef(null);
+  
   // Сети для каждой криптовалюты (исправлено: UNI теперь массив)
   const currencyNetworks = {
     BTC: ['Bitcoin'],
@@ -80,6 +85,7 @@ const App = () => {
     SHIB: ['Ethereum'],
     UNI: ['Ethereum'], // Исправлено
   };
+  
   // Фиктивные адреса для каждой криптовалюты
   const fakeAddresses = {
     BTC: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
@@ -98,6 +104,7 @@ const App = () => {
     SHIB: '0x71c7656ec7ab88b098defb751b7401b5f6d8976f',
     UNI: '0x71c7656ec7ab88b098defb751b7401b5f6d8976f',
   };
+  
   // Локализация (исправлены дубликаты wallet)
   const translations = {
     ru: {
@@ -187,6 +194,33 @@ const App = () => {
       },
       noResults: 'Нет совпадений',
       platformFee: 'Комиссия платформы',
+      // Новые переводы для истории
+      history: {
+        sortBy: 'Сортировать по',
+        filterBy: 'Фильтровать по',
+        type: 'Тип',
+        currency: 'Валюта',
+        amount: 'Количество',
+        total: 'Сумма',
+        date: 'Дата',
+        all: 'Все',
+        buy: 'Покупка',
+        sell: 'Продажа',
+        ascending: 'по возрастанию',
+        descending: 'по убыванию',
+        fromDate: 'От даты',
+        toDate: 'До даты',
+        applyFilters: 'Применить фильтры',
+        resetFilters: 'Сбросить',
+        statistics: 'Статистика',
+        totalTrades: 'Всего сделок',
+        totalBuys: 'Покупок',
+        totalSells: 'Продаж',
+        totalBuyAmount: 'Сумма покупок',
+        totalSellAmount: 'Сумма продаж',
+        netProfit: 'Чистая прибыль',
+        tradeDistribution: 'Распределение сделок',
+      }
     },
     en: {
       title: 'Scam of Market',
@@ -275,6 +309,33 @@ const App = () => {
       },
       noResults: 'No results found',
       platformFee: 'Platform fee',
+      // New translations for history
+      history: {
+        sortBy: 'Sort by',
+        filterBy: 'Filter by',
+        type: 'Type',
+        currency: 'Currency',
+        amount: 'Amount',
+        total: 'Total',
+        date: 'Date',
+        all: 'All',
+        buy: 'Buy',
+        sell: 'Sell',
+        ascending: 'ascending',
+        descending: 'descending',
+        fromDate: 'From date',
+        toDate: 'To date',
+        applyFilters: 'Apply filters',
+        resetFilters: 'Reset',
+        statistics: 'Statistics',
+        totalTrades: 'Total trades',
+        totalBuys: 'Buys',
+        totalSells: 'Sells',
+        totalBuyAmount: 'Buy amount',
+        totalSellAmount: 'Sell amount',
+        netProfit: 'Net profit',
+        tradeDistribution: 'Trade distribution',
+      }
     },
     zh: {
       title: '诈骗市场',
@@ -363,6 +424,33 @@ const App = () => {
       },
       noResults: '没有找到结果',
       platformFee: '平台费用',
+      // New translations for history
+      history: {
+        sortBy: '排序方式',
+        filterBy: '筛选条件',
+        type: '类型',
+        currency: '货币',
+        amount: '数量',
+        total: '总额',
+        date: '日期',
+        all: '全部',
+        buy: '买入',
+        sell: '卖出',
+        ascending: '升序',
+        descending: '降序',
+        fromDate: '起始日期',
+        toDate: '截止日期',
+        applyFilters: '应用筛选',
+        resetFilters: '重置',
+        statistics: '统计信息',
+        totalTrades: '总交易数',
+        totalBuys: '买入次数',
+        totalSells: '卖出次数',
+        totalBuyAmount: '买入总额',
+        totalSellAmount: '卖出总额',
+        netProfit: '净收益',
+        tradeDistribution: '交易分布',
+      }
     },
     es: {
       title: 'Scam of Market',
@@ -451,6 +539,33 @@ const App = () => {
       },
       noResults: 'No se encontraron resultados',
       platformFee: 'Tarifa de plataforma',
+      // New translations for history
+      history: {
+        sortBy: 'Ordenar por',
+        filterBy: 'Filtrar por',
+        type: 'Tipo',
+        currency: 'Moneda',
+        amount: 'Cantidad',
+        total: 'Total',
+        date: 'Fecha',
+        all: 'Todo',
+        buy: 'Compra',
+        sell: 'Venta',
+        ascending: 'ascendente',
+        descending: 'descendente',
+        fromDate: 'Desde fecha',
+        toDate: 'Hasta fecha',
+        applyFilters: 'Aplicar filtros',
+        resetFilters: 'Restablecer',
+        statistics: 'Estadísticas',
+        totalTrades: 'Total de transacciones',
+        totalBuys: 'Compras',
+        totalSells: 'Ventas',
+        totalBuyAmount: 'Monto de compras',
+        totalSellAmount: 'Monto de ventas',
+        netProfit: 'Beneficio neto',
+        tradeDistribution: 'Distribución de transacciones',
+      }
     },
     de: {
       title: 'Scam of Market',
@@ -539,6 +654,33 @@ const App = () => {
       },
       noResults: 'Keine Ergebnisse gefunden',
       platformFee: 'Plattformgebühr',
+      // New translations for history
+      history: {
+        sortBy: 'Sortieren nach',
+        filterBy: 'Filtern nach',
+        type: 'Typ',
+        currency: 'Währung',
+        amount: 'Menge',
+        total: 'Gesamt',
+        date: 'Datum',
+        all: 'Alle',
+        buy: 'Kauf',
+        sell: 'Verkauf',
+        ascending: 'aufsteigend',
+        descending: 'absteigend',
+        fromDate: 'Von Datum',
+        toDate: 'Bis Datum',
+        applyFilters: 'Filter anwenden',
+        resetFilters: 'Zurücksetzen',
+        statistics: 'Statistik',
+        totalTrades: 'Gesamttransaktionen',
+        totalBuys: 'Käufe',
+        totalSells: 'Verkäufe',
+        totalBuyAmount: 'Kaufbetrag',
+        totalSellAmount: 'Verkaufsbetrag',
+        netProfit: 'Nettogewinn',
+        tradeDistribution: 'Transaktionsverteilung',
+      }
     },
     ar: {
       title: 'Scam of Market',
@@ -627,6 +769,33 @@ const App = () => {
       },
       noResults: 'لا توجد نتائج',
       platformFee: 'رسوم المنصة',
+      // New translations for history
+      history: {
+        sortBy: 'ترتيب حسب',
+        filterBy: 'تصفية حسب',
+        type: 'النوع',
+        currency: 'العملة',
+        amount: 'الكمية',
+        total: 'الإجمالي',
+        date: 'التاريخ',
+        all: 'الكل',
+        buy: 'شراء',
+        sell: 'بيع',
+        ascending: 'تصاعدي',
+        descending: 'تنازلي',
+        fromDate: 'من تاريخ',
+        toDate: 'إلى تاريخ',
+        applyFilters: 'تطبيق التصفية',
+        resetFilters: 'إعادة تعيين',
+        statistics: 'الإحصائيات',
+        totalTrades: 'إجمالي الصفقات',
+        totalBuys: 'المشتريات',
+        totalSells: 'المبيعات',
+        totalBuyAmount: 'مبلغ الشراء',
+        totalSellAmount: 'مبلغ البيع',
+        netProfit: 'الربح الصافي',
+        tradeDistribution: 'توزيع الصفقات',
+      }
     },
     ja: {
       title: 'Scam of Market',
@@ -715,9 +884,38 @@ const App = () => {
       },
       noResults: '結果が見つかりません',
       platformFee: 'プラットフォーム手数料',
+      // New translations for history
+      history: {
+        sortBy: '並べ替え',
+        filterBy: 'フィルター',
+        type: 'タイプ',
+        currency: '通貨',
+        amount: '数量',
+        total: '合計',
+        date: '日付',
+        all: 'すべて',
+        buy: '購入',
+        sell: '売却',
+        ascending: '昇順',
+        descending: '降順',
+        fromDate: '開始日',
+        toDate: '終了日',
+        applyFilters: '適用',
+        resetFilters: 'リセット',
+        statistics: '統計',
+        totalTrades: '取引総数',
+        totalBuys: '購入数',
+        totalSells: '売却数',
+        totalBuyAmount: '購入金額',
+        totalSellAmount: '売却金額',
+        netProfit: '純利益',
+        tradeDistribution: '取引分布',
+      }
     },
   };
+  
   const t = translations[language];
+  
   // Маппинг для API
   const apiSymbolMap = {
     BTC: 'bitcoin',
@@ -736,6 +934,7 @@ const App = () => {
     SHIB: 'shiba-inu',
     UNI: 'uniswap'
   };
+  
   // Функция для получения цен с CoinGecko API
   const fetchPrices = async () => {
     try {
@@ -768,6 +967,7 @@ const App = () => {
       setIsFetching(false);
     }
   };
+  
   // Функция для поиска криптовалют
   const searchCryptocurrencies = async (query) => {
     if (!query || query.length < 2) {
@@ -805,6 +1005,7 @@ const App = () => {
       setIsSearching(false);
     }
   };
+  
   // Функция для получения данных о конкретной криптовалюте
   const getCurrencyData = async (apiId, symbol) => {
     try {
@@ -832,6 +1033,7 @@ const App = () => {
     }
     return null;
   };
+  
   // Telegram WebApp SDK (исправлено: useCallback для onBackClick)
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -850,6 +1052,7 @@ const App = () => {
       }
     }
   }, []);
+  
   // Уведомления (исправлено: уникальный ID)
   let notificationIdCounter = useRef(0);
   const addNotification = (message, type = 'info') => {
@@ -859,6 +1062,7 @@ const App = () => {
       setNotifications(prev => prev.filter(n => n.id !== id));
     }, 3000);
   };
+  
   // Обновление цен при загрузке и каждые 30 секунд
   useEffect(() => {
     fetchPrices();
@@ -870,6 +1074,7 @@ const App = () => {
       }
     };
   }, []);
+  
   // Поиск при изменении поискового запроса
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -877,6 +1082,7 @@ const App = () => {
     }, 300);
     return () => clearTimeout(delayDebounce);
   }, [searchTerm]);
+  
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setTradeForm((prev) => ({
@@ -884,9 +1090,10 @@ const App = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
+  
   const handleTrade = (e) => {
     e.preventDefault();
-    if (!tradeForm.currency || !tradeForm.amount || !tradeForm.walletOrExchange || !tradeForm.paymentMethod) {
+    if (!tradeForm.currency || !tradeForm.amount || !tradeForm.walletOrExchange) {
       addNotification(t.notification.fieldRequired, 'error');
       return;
     }
@@ -938,6 +1145,7 @@ const App = () => {
       window.Telegram.WebApp.sendData(JSON.stringify(newTrade));
     }
   };
+  
   const handleCurrencyClick = async (currency) => {
     // Если валюта из API, добавляем ее в основной список
     if (currency.isApiResult) {
@@ -966,8 +1174,10 @@ const App = () => {
     setSelectedCurrency(currency.id);
     setSearchTerm('');
   };
+  
   // Фильтрация валют по поисковому запросу
   const filteredCurrencies = searchTerm ? searchResults : currencies;
+  
   // Исправленный компонент TradingViewWidget (исправлено: widgetId через useMemo)
   const TradingViewWidget = ({ symbol = "BINANCE:BTCUSDT" }) => {
     const containerRef = useRef(null);
@@ -1033,6 +1243,7 @@ const App = () => {
       />
     );
   };
+  
   // Открытие TradingView
   const openTradingView = (currency) => {
     const symbol = `${currency.symbol}USDT`;
@@ -1043,6 +1254,7 @@ const App = () => {
       window.open(tradingViewUrl, '_blank');
     }
   };
+  
   // Инициализация балансов пользователей
   useEffect(() => {
     const initialBalances = {};
@@ -1051,6 +1263,7 @@ const App = () => {
     });
     setUserBalances(initialBalances);
   }, [currencies]);
+  
   // Обработчики для раздела "Получить"
   const handleReceiveChange = (e) => {
     const { name, value } = e.target;
@@ -1059,6 +1272,7 @@ const App = () => {
       receive: { ...prev.receive, [name]: value }
     }));
   };
+  
   const handleCopyAddress = () => {
     if (walletForm.receive.currency && fakeAddresses[walletForm.receive.currency]) {
       navigator.clipboard.writeText(fakeAddresses[walletForm.receive.currency])
@@ -1071,6 +1285,7 @@ const App = () => {
         });
     }
   };
+  
   // Обработчики для раздела "Отправить"
   const handleSendChange = (e) => {
     const { name, value } = e.target;
@@ -1079,6 +1294,7 @@ const App = () => {
       send: { ...prev.send, [name]: value }
     }));
   };
+  
   const calculateNetworkFee = (currency, network) => {
     const fees = {
       BTC: 0.0005,
@@ -1099,6 +1315,7 @@ const App = () => {
     };
     return fees[currency] || 0.01;
   };
+  
   // Проверка валидности адреса
   const isValidAddress = (address, currency) => {
     if (!address || address.length < 10) return false;
@@ -1110,9 +1327,11 @@ const App = () => {
     if (currency === 'ADA') return address.length >= 100;
     return address.length >= 10;
   };
+  
   // Состояние для модального окна подтверждения
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmTransaction, setConfirmTransaction] = useState(null);
+  
   // Обработчик отправки
   const handleSend = (e) => {
     e.preventDefault();
@@ -1151,6 +1370,7 @@ const App = () => {
     setConfirmTransaction(transaction);
     setShowConfirmModal(true);
   };
+  
   // Подтверждение отправки
   const confirmSend = () => {
     if (!confirmTransaction) return;
@@ -1176,11 +1396,13 @@ const App = () => {
     setShowConfirmModal(false);
     setConfirmTransaction(null);
   };
+  
   // Отмена отправки
   const cancelSend = () => {
     setShowConfirmModal(false);
     setConfirmTransaction(null);
   };
+  
   // Установка максимальной суммы
   const setMaxAmount = () => {
     if (!walletForm.send.currency) return;
@@ -1197,6 +1419,7 @@ const App = () => {
       }
     }));
   };
+  
   // Язык
   useEffect(() => {
     const savedLang = localStorage.getItem('language');
@@ -1210,13 +1433,152 @@ const App = () => {
     }
     setIsLoaded(true);
   }, []);
+  
   useEffect(() => {
     localStorage.setItem('language', language);
   }, [language]);
+  
+  // Состояния для вкладки "История"
+  const [sortConfig, setSortConfig] = useState({
+    key: 'timestamp',
+    direction: 'descending'
+  });
+  
+  const [filters, setFilters] = useState({
+    type: 'all',
+    currency: 'all',
+    fromDate: '',
+    toDate: ''
+  });
+  
+  const [showFilters, setShowFilters] = useState(false);
+  
+  // Функция сортировки
+  const sortedAndFilteredTrades = useMemo(() => {
+    let result = [...trades];
+    
+    // Фильтрация
+    if (filters.type !== 'all') {
+      result = result.filter(trade => trade.type === filters.type);
+    }
+    
+    if (filters.currency !== 'all') {
+      result = result.filter(trade => trade.currency === filters.currency);
+    }
+    
+    if (filters.fromDate) {
+      const from = new Date(filters.fromDate).getTime();
+      result = result.filter(trade => {
+        const tradeDate = new Date(trade.timestamp).getTime();
+        return tradeDate >= from;
+      });
+    }
+    
+    if (filters.toDate) {
+      const to = new Date(filters.toDate).getTime() + 24*60*60*1000 - 1; // Include full day
+      result = result.filter(trade => {
+        const tradeDate = new Date(trade.timestamp).getTime();
+        return tradeDate <= to;
+      });
+    }
+    
+    // Сортировка
+    if (sortConfig.key) {
+      result.sort((a, b) => {
+        let aValue = a[sortConfig.key];
+        let bValue = b[sortConfig.key];
+        
+        // Special handling for timestamp
+        if (sortConfig.key === 'timestamp') {
+          aValue = new Date(aValue).getTime();
+          bValue = new Date(bValue).getTime();
+        }
+        
+        // Special handling for numeric values
+        if (sortConfig.key === 'amount' || sortConfig.key === 'total' || sortConfig.key === 'rate') {
+          aValue = parseFloat(aValue);
+          bValue = parseFloat(bValue);
+        }
+        
+        if (aValue < bValue) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    
+    return result;
+  }, [trades, sortConfig, filters]);
+  
+  // Функция для изменения сортировки
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+  
+  // Функция для изменения фильтров
+  const handleFilterChange = (name, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  
+  // Функция сброса фильтров
+  const resetFilters = () => {
+    setFilters({
+      type: 'all',
+      currency: 'all',
+      fromDate: '',
+      toDate: ''
+    });
+  };
+  
+  // Статистика
+  const statistics = useMemo(() => {
+    const totalTrades = sortedAndFilteredTrades.length;
+    const buys = sortedAndFilteredTrades.filter(t => t.type === 'buy');
+    const sells = sortedAndFilteredTrades.filter(t => t.type === 'sell');
+    
+    const totalBuyAmount = buys.reduce((sum, trade) => sum + parseFloat(trade.total), 0);
+    const totalSellAmount = sells.reduce((sum, trade) => sum + parseFloat(trade.total), 0);
+    const netProfit = totalSellAmount - totalBuyAmount;
+    
+    const buyPercentage = totalTrades > 0 ? (buys.length / totalTrades) * 100 : 0;
+    const sellPercentage = totalTrades > 0 ? (sells.length / totalTrades) * 100 : 0;
+    
+    return {
+      totalTrades,
+      totalBuys: buys.length,
+      totalSells: sells.length,
+      totalBuyAmount: totalBuyAmount.toFixed(2),
+      totalSellAmount: totalSellAmount.toFixed(2),
+      netProfit: netProfit.toFixed(2),
+      buyPercentage,
+      sellPercentage
+    };
+  }, [sortedAndFilteredTrades]);
+  
+  // Получение уникальных валют для фильтра
+  const uniqueCurrencies = useMemo(() => {
+    const currencySet = new Set();
+    trades.forEach(trade => {
+      currencySet.add(trade.currency);
+    });
+    return Array.from(currencySet).sort();
+  }, [trades]);
+  
   // Защита от рендера до загрузки
   if (!isLoaded) {
     return <div className="bg-white text-center p-4 font-medium">Loading...</div>;
   }
+  
   return (
     <div
       dir={language === 'ar' ? 'rtl' : 'ltr'}
@@ -1235,6 +1597,7 @@ const App = () => {
           </div>
         ))}
       </div>
+      
       {/* Заголовок */}
       <header className="bg-white shadow-md p-4 flex justify-between items-center border-b border-gray-200">
         <div className="flex items-center space-x-2">
@@ -1268,6 +1631,7 @@ const App = () => {
           ))}
         </div>
       </header>
+      
       {/* Навигация */}
       <nav className="flex justify-around bg-white border-b border-gray-200 sticky top-0 z-10">
         {['trade', 'portfolio', 'history', 'wallet'].map(tab => (
@@ -1284,6 +1648,7 @@ const App = () => {
           </button>
         ))}
       </nav>
+      
       {/* Основной контент */}
       <main className="p-4 pb-20">
         {activeTab === 'trade' && (
@@ -1358,6 +1723,7 @@ const App = () => {
                 </button>
               </div>
             </div>
+            
             {/* Список валют или графики */}
             {activeView === 'list' ? (
               <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -1502,6 +1868,7 @@ const App = () => {
                 )}
               </div>
             )}
+            
             {/* Форма торговли */}
             <form onSubmit={handleTrade} className="bg-white p-4 rounded-lg shadow-md space-y-4">
               <h3 className="font-medium text-lg">{t.form.title}</h3>
@@ -1633,34 +2000,6 @@ const App = () => {
                   <option value="Gate.io">Gate.io</option>
                 </select>
               )}
-              {/* Способ оплаты */}
-              <div className="grid grid-cols-3 gap-2 mt-2">
-                {[
-                  { value: 'cash', label: t.form.cash },
-                  { value: 'bankTransfer', label: t.form.bankTransfer },
-                  { value: 'card', label: t.form.card },
-                ].map(method => (
-                  <label
-                    key={method.value}
-                    style={{
-                      backgroundColor: tradeForm.paymentMethod === method.value ? '#8B4513' : 'white',
-                      color: tradeForm.paymentMethod === method.value ? 'white' : '#8B4513',
-                      borderColor: tradeForm.paymentMethod === method.value ? '#8B4513' : '#D1D5DB',
-                    }}
-                    className="p-2 border rounded-md text-center text-sm cursor-pointer transition hover:bg-gray-50"
-                  >
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value={method.value}
-                      checked={tradeForm.paymentMethod === method.value}
-                      onChange={handleInputChange}
-                      className="sr-only"
-                    />
-                    {method.label}
-                  </label>
-                ))}
-              </div>
               {/* Курс */}
               <input
                 type="number"
@@ -1778,6 +2117,7 @@ const App = () => {
             </form>
           </div>
         )}
+        
         {/* Портфель */}
         {activeTab === 'portfolio' && (
           <div className="space-y-4">
@@ -1800,128 +2140,356 @@ const App = () => {
             ))}
           </div>
         )}
+        
         {/* История сделок */}
         {activeTab === 'history' && (
-          <div className="space-y-4">
-            <div className="flex justify-between items-center mb-6">
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold text-gray-800">{t.historyTitle}</h2>
-              <div className="flex items-center space-x-2 text-sm text-gray-500">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                style={{ backgroundColor: '#8B4513' }}
+                className="px-4 py-2 rounded-lg text-white text-sm font-medium hover:bg-[#703A0F] transition flex items-center space-x-1"
+              >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
                 </svg>
-                <span>{trades.length} {t.historyTitle.toLowerCase()}</span>
+                <span>{t.history.filterBy}</span>
+              </button>
+            </div>
+            
+            {/* Панель фильтров */}
+            {showFilters && (
+              <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* Тип сделки */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.history.type}</label>
+                    <select
+                      value={filters.type}
+                      onChange={(e) => handleFilterChange('type', e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30"
+                    >
+                      <option value="all">{t.history.all}</option>
+                      <option value="buy">{t.history.buy}</option>
+                      <option value="sell">{t.history.sell}</option>
+                    </select>
+                  </div>
+                  
+                  {/* Валюта */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.history.currency}</label>
+                    <select
+                      value={filters.currency}
+                      onChange={(e) => handleFilterChange('currency', e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30"
+                    >
+                      <option value="all">{t.history.all}</option>
+                      {uniqueCurrencies.map(currency => (
+                        <option key={currency} value={currency}>{currency}</option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  {/* От даты */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.history.fromDate}</label>
+                    <input
+                      type="date"
+                      value={filters.fromDate}
+                      onChange={(e) => handleFilterChange('fromDate', e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30"
+                    />
+                  </div>
+                  
+                  {/* До даты */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.history.toDate}</label>
+                    <input
+                      type="date"
+                      value={filters.toDate}
+                      onChange={(e) => handleFilterChange('toDate', e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#8B4513]/30"
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex space-x-3 pt-2">
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-50 transition"
+                  >
+                    {t.history.applyFilters}
+                  </button>
+                  <button
+                    onClick={resetFilters}
+                    style={{ backgroundColor: '#8B4513' }}
+                    className="px-4 py-2 text-white rounded-md text-sm font-medium hover:bg-[#703A0F] transition"
+                  >
+                    {t.history.resetFilters}
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            {/* Статистика */}
+            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">{t.history.statistics}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <div className="text-2xl font-bold text-gray-800">{statistics.totalTrades}</div>
+                  <div className="text-sm text-gray-600">{t.history.totalTrades}</div>
+                </div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">{statistics.totalBuys}</div>
+                  <div className="text-sm text-green-600">{t.history.totalBuys}</div>
+                </div>
+                <div className="text-center p-4 bg-red-50 rounded-lg">
+                  <div className="text-2xl font-bold text-red-600">{statistics.totalSells}</div>
+                  <div className="text-sm text-red-600">{t.history.totalSells}</div>
+                </div>
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600">{statistics.totalBuyAmount}</div>
+                  <div className="text-sm text-blue-600">{t.history.totalBuyAmount} USDT</div>
+                </div>
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600">{statistics.totalSellAmount}</div>
+                  <div className="text-sm text-purple-600">{t.history.totalSellAmount} USDT</div>
+                </div>
+              </div>
+              
+              {/* Диаграмма распределения сделок */}
+              <div className="space-y-4">
+                <h4 className="font-medium text-gray-800">{t.history.tradeDistribution}</h4>
+                <div className="flex items-center space-x-4">
+                  <div className="flex-1 bg-gray-200 rounded-full h-4 overflow-hidden">
+                    <div 
+                      className="bg-green-500 h-4"
+                      style={{ width: `${statistics.buyPercentage}%` }}
+                    ></div>
+                    <div 
+                      className="bg-red-500 h-4"
+                      style={{ width: `${statistics.sellPercentage}%` }}
+                    ></div>
+                  </div>
+                  <div className="flex space-x-4 text-sm">
+                    <div className="flex items-center space-x-1">
+                      <div className="w-3 h-3 bg-green-500 rounded"></div>
+                      <span>{Math.round(statistics.buyPercentage)}%</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-3 h-3 bg-red-500 rounded"></div>
+                      <span>{Math.round(statistics.sellPercentage)}%</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 mt-2">
+                  <span>{t.history.buy}</span>
+                  <span>{t.history.sell}</span>
+                </div>
               </div>
             </div>
             
-            {trades.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
+            {/* Список сделок */}
+            <div className="space-y-4">
+              {sortedAndFilteredTrades.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-700 mb-2">{t.noTrades}</h3>
+                  <p className="text-sm text-gray-500 max-w-xs">
+                    {t.tabs.trade} {t.tabs.trade.toLowerCase()} to see them here
+                  </p>
                 </div>
-                <h3 className="text-lg font-medium text-gray-700 mb-2">{t.noTrades}</h3>
-                <p className="text-sm text-gray-500 max-w-xs">
-                  {t.tabs.trade} {t.tabs.trade.toLowerCase()} to see them here
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {trades.map((trade) => (
-                  <div 
-                    key={trade.id} 
-                    className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.01] hover:border-[#8B4513]/20"
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div 
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            trade.type === 'buy' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
-                          }`}
-                        >
-                          {trade.type === 'buy' ? (
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                            </svg>
-                          ) : (
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                            </svg>
-                          )}
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-800">
-                            {t.successMessage[trade.type]} {trade.amount} {trade.currency}
-                          </h3>
-                          <div className="flex items-center space-x-2 mt-1">
-                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                              {trade.timestamp}
-                            </span>
-                            <span className={`text-xs px-2 py-1 rounded-full ${
-                              trade.type === 'buy' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                            }`}>
-                              {trade.type === 'buy' ? t.form.buy : t.form.sell}
-                            </span>
-                          </div>
-                        </div>
+              ) : (
+                <>
+                  {/* Заголовок таблицы с сортировкой */}
+                  <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <div className="grid grid-cols-12 gap-2 p-3 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div 
+                        className="col-span-2 flex items-center cursor-pointer hover:text-[#8B4513] transition"
+                        onClick={() => requestSort('timestamp')}
+                      >
+                        {t.history.date}
+                        {sortConfig.key === 'timestamp' && (
+                          <svg 
+                            className={`w-4 h-4 ml-1 ${sortConfig.direction === 'ascending' ? 'transform rotate-180' : ''}`} 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                        )}
                       </div>
-                      <div className="text-right">
-                        <div className="font-bold text-lg text-gray-900">
-                          {trade.total} USDT
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">
-                          {trade.rate} {trade.currency}/USDT
-                        </div>
+                      <div 
+                        className="col-span-2 flex items-center cursor-pointer hover:text-[#8B4513] transition"
+                        onClick={() => requestSort('type')}
+                      >
+                        {t.history.type}
+                        {sortConfig.key === 'type' && (
+                          <svg 
+                            className={`w-4 h-4 ml-1 ${sortConfig.direction === 'ascending' ? 'transform rotate-180' : ''}`} 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                        )}
                       </div>
-                    </div>
-                    
-                    <div className="border-t border-gray-100 pt-4">
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">{t.form.exchangeType}:</span>
-                            <span className="font-medium">{trade.walletOrExchange}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">{t.form.paymentMethod}:</span>
-                            <span className="font-medium">{t.form[trade.paymentMethod]}</span>
-                          </div>
-                          {trade.orderType && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">{t.form.orderType}:</span>
-                              <span className="font-medium">{t.form[trade.orderType]}</span>
-                            </div>
-                          )}
-                        </div>
-                        
-                        <div className="space-y-2">
-                          {trade.platformFee && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">{t.platformFee}:</span>
-                              <span className="font-medium text-red-500">-{trade.platformFee} USDT</span>
-                            </div>
-                          )}
-                          {trade.takeProfit && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">TP:</span>
-                              <span className="font-medium text-green-500">{trade.takeProfit} USDT</span>
-                            </div>
-                          )}
-                          {trade.stopLoss && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">SL:</span>
-                              <span className="font-medium text-red-500">{trade.stopLoss} USDT</span>
-                            </div>
-                          )}
-                        </div>
+                      <div 
+                        className="col-span-2 flex items-center cursor-pointer hover:text-[#8B4513] transition"
+                        onClick={() => requestSort('currency')}
+                      >
+                        {t.history.currency}
+                        {sortConfig.key === 'currency' && (
+                          <svg 
+                            className={`w-4 h-4 ml-1 ${sortConfig.direction === 'ascending' ? 'transform rotate-180' : ''}`} 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <div 
+                        className="col-span-3 flex items-center cursor-pointer hover:text-[#8B4513] transition"
+                        onClick={() => requestSort('amount')}
+                      >
+                        {t.history.amount}
+                        {sortConfig.key === 'amount' && (
+                          <svg 
+                            className={`w-4 h-4 ml-1 ${sortConfig.direction === 'ascending' ? 'transform rotate-180' : ''}`} 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <div 
+                        className="col-span-3 flex items-center cursor-pointer hover:text-[#8B4513] transition"
+                        onClick={() => requestSort('total')}
+                      >
+                        {t.history.total}
+                        {sortConfig.key === 'total' && (
+                          <svg 
+                            className={`w-4 h-4 ml-1 ${sortConfig.direction === 'ascending' ? 'transform rotate-180' : ''}`} 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                        )}
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
+                  
+                  {/* Сделки */}
+                  <div className="space-y-3">
+                    {sortedAndFilteredTrades.map((trade) => (
+                      <div 
+                        key={trade.id} 
+                        className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.01] hover:border-[#8B4513]/20"
+                      >
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-center space-x-3">
+                            <div 
+                              className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                trade.type === 'buy' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                              }`}
+                            >
+                              {trade.type === 'buy' ? (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                                </svg>
+                              ) : (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                                </svg>
+                              )}
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-gray-800">
+                                {t.successMessage[trade.type]} {trade.amount} {trade.currency}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                                  {trade.timestamp}
+                                </span>
+                                <span className={`text-xs px-2 py-1 rounded-full ${
+                                  trade.type === 'buy' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                }`}>
+                                  {trade.type === 'buy' ? t.form.buy : t.form.sell}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold text-lg text-gray-900">
+                              {trade.total} USDT
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {trade.rate} {trade.currency}/USDT
+                            </div>
+                          </div>
+                        </div>
+                        <div className="border-t border-gray-100 pt-4">
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">{t.form.exchangeType}:</span>
+                                <span className="font-medium">{trade.walletOrExchange}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">{t.form.paymentMethod}:</span>
+                                <span className="font-medium">{t.form[trade.paymentMethod]}</span>
+                              </div>
+                              {trade.orderType && (
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">{t.form.orderType}:</span>
+                                  <span className="font-medium">{t.form[trade.orderType]}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="space-y-2">
+                              {trade.platformFee && (
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">{t.platformFee}:</span>
+                                  <span className="font-medium text-red-500">-{trade.platformFee} USDT</span>
+                                </div>
+                              )}
+                              {trade.takeProfit && (
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">TP:</span>
+                                  <span className="font-medium text-green-500">{trade.takeProfit} USDT</span>
+                                </div>
+                              )}
+                              {trade.stopLoss && (
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">SL:</span>
+                                  <span className="font-medium text-red-500">{trade.stopLoss} USDT</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         )}
+        
         {/* Объединённый раздел "Кошелёк" */}
         {activeTab === 'wallet' && (
           <div className="space-y-6">
@@ -2197,6 +2765,7 @@ const App = () => {
           </div>
         )}
       </main>
+      
       {/* Модальное окно подтверждения */}
       {showConfirmModal && confirmTransaction && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -2252,6 +2821,7 @@ const App = () => {
           </div>
         </div>
       )}
+      
       {/* Подвал */}
       <footer className="mt-auto bg-white border-t border-gray-200 p-4 fixed bottom-0 left-0 right-0">
         <div className="flex justify-between items-center">
@@ -2270,4 +2840,5 @@ const App = () => {
     </div>
   );
 };
+
 export default App;
