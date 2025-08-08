@@ -66,6 +66,9 @@ const App = () => {
   const [userBalances, setUserBalances] = useState({});
   const [selectedNetwork, setSelectedNetwork] = useState('');
   const receiveAddressRef = useRef(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userBalance, setUserBalance] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   
   // Сети для каждой криптовалюты (исправлено: UNI теперь массив)
   const currencyNetworks = {
@@ -967,6 +970,10 @@ const App = () => {
       setIsFetching(false);
     }
   };
+  const getCurrencyBalance = (symbol) => {
+  if (!userBalance) return 0;
+  return userBalance[symbol] || 0;
+};
   
   // Функция для поиска криптовалют
   const searchCryptocurrencies = async (query) => {
@@ -1074,6 +1081,44 @@ const App = () => {
       }
     };
   }, []);
+  // Инициализация пользователя из Telegram
+useEffect(() => {
+  const initializeTelegramUser = async () => {
+    try {
+      if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+        
+        const user = window.Telegram.WebApp.initDataUnsafe.user;
+        
+        if (user) {
+          const userData = {
+            userId: user.id.toString(),
+            firstName: user.first_name,
+            lastName: user.last_name || '',
+            username: user.username || ''
+          };
+
+          // Инициализируем пользователя на сервере
+          const result = await apiClient.initUser(userData);
+          
+          if (result.success) {
+            setCurrentUser(result.user);
+            setUserBalance(result.balances);
+            addNotification(t('welcome') + ', ' + user.first_name + '!', 'success');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка инициализации пользователя:', error);
+      addNotification('Ошибка подключения к серверу', 'error');
+    } finally {
+      setIsInitialized(true);
+    }
+  };
+
+  initializeTelegramUser();
+}, []);
   
   // Поиск при изменении поискового запроса
   useEffect(() => {
@@ -1174,6 +1219,73 @@ const App = () => {
     setSelectedCurrency(currency.id);
     setSearchTerm('');
   };
+  // Обновленная версия handleBuy (строка ~780)
+const handleBuy = async (symbol, amount) => {
+  // Проверяем, инициализирован ли пользователь
+  if (!currentUser) {
+    // Локальный режим для тестирования
+    setUserBalances(prev => ({
+      ...prev,
+      [symbol]: (prev[symbol] || 0) + amount,
+      'USDT': (prev['USDT'] || 10000) - (amount * selectedCurrency.price)
+    }));
+    addNotification(`${t('bought')} ${amount} ${symbol}`, 'success');
+    return;
+  }
+
+  // Серверный режим для Telegram пользователей
+  try {
+    setIsTrading(true);
+    const result = await apiClient.buyCrypto(currentUser.id, symbol, amount);
+    if (result.success) {
+      const balanceData = await apiClient.getBalance(currentUser.id);
+      setUserBalance(balanceData.balances);
+      addNotification(t('tradeSuccess'), 'success');
+      setTradeAmount('');
+    } else {
+      addNotification(result.error || t('tradeError'), 'error');
+    }
+  } catch (error) {
+    console.error('Ошибка покупки:', error);
+    addNotification(t('tradeError'), 'error');
+  } finally {
+    setIsTrading(false);
+  }
+};
+
+// Обновленная версия handleSell (строка ~820)
+const handleSell = async (symbol, amount) => {
+  // Проверяем, инициализирован ли пользователь
+  if (!currentUser) {
+    // Локальный режим для тестирования
+    setUserBalances(prev => ({
+      ...prev,
+      [symbol]: Math.max(0, (prev[symbol] || 0) - amount),
+      'USDT': (prev['USDT'] || 10000) + (amount * selectedCurrency.price)
+    }));
+    addNotification(`${t('sold')} ${amount} ${symbol}`, 'success');
+    return;
+  }
+
+  // Серверный режим для Telegram пользователей
+  try {
+    setIsTrading(true);
+    const result = await apiClient.sellCrypto(currentUser.id, symbol, amount);
+    if (result.success) {
+      const balanceData = await apiClient.getBalance(currentUser.id);
+      setUserBalance(balanceData.balances);
+      addNotification(t('tradeSuccess'), 'success');
+      setTradeAmount('');
+    } else {
+      addNotification(result.error || t('tradeError'), 'error');
+    }
+  } catch (error) {
+    console.error('Ошибка продажи:', error);
+    addNotification(t('tradeError'), 'error');
+  } finally {
+    setIsTrading(false);
+  }
+};
   
   // Фильтрация валют по поисковому запросу
   const filteredCurrencies = searchTerm ? searchResults : currencies;
