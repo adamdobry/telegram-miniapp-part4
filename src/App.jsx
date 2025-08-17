@@ -21,7 +21,7 @@ const App = () => {
       });
       return await response.json();
     } catch (error) {
-      console.error('API buyCrypto error:', error);
+     throw new Error(error.message || 'Неизвестная ошибка');
       throw error;
     }
   },
