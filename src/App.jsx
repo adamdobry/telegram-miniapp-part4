@@ -1,6 +1,44 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 const App = () => {
+
+      try {
+      const response = await fetch(`${API_BASE_URL}/api/users/${userId}/balance`);
+      return await response.json();
+    } catch (error) {
+      console.error('API getBalance error:', error);
+      throw error;
+    }
+  },
+  buyCrypto: async (userId, symbol, amount) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/${userId}/buy`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ symbol, amount }),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('API buyCrypto error:', error);
+      throw error;
+    }
+  },
+  sellCrypto: async (userId, symbol, amount) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/${userId}/sell`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ symbol, amount }),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('API sellCrypto error:', error);
+      throw error;
+    };
   const [activeTab, setActiveTab] = useState('trade');
   const [currencies, setCurrencies] = useState([
     { id: 1, name: 'Bitcoin', symbol: 'BTC', price: 62000, change: '+2.5%' },
