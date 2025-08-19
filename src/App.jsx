@@ -45,6 +45,96 @@ const App = () => {
   const [isFetching, setIsFetching] = useState(false);
   const fetchInterval = useRef(null);
   
+  // === НАСТРОЙКА API URL ===
+  const API_BASE_URL = process.env.NODE_ENV === 'production' 
+    ? 'https://scam-of-market-backend.onrender.com'  // ✅ Исправлено: убраны лишние пробелы
+    : 'http://localhost:5000';
+
+  // === API CLIENT ===
+  const apiClient = {
+    initUser: async (initData, userData) => {  // ✅ Добавлен async
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/users/init`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData, userData })
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Ошибка инициализации пользователя');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('API initUser error:', error);
+        throw new Error(error.message || 'Неизвестная ошибка');  // ✅ Исправлено
+      }
+    },
+
+    getBalance: async (userId) => {  // ✅ Добавлен async
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/balance/${userId}`);  // ✅ Исправлен URL
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Ошибка получения баланса');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('API getBalance error:', error);
+        throw new Error(error.message || 'Неизвестная ошибка');  // ✅ Исправлено
+      }
+    },
+
+    buyCrypto: async (userId, symbol, amount) => {  // ✅ Добавлен async
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/buy`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, symbol, amount })
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Ошибка покупки');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('API buyCrypto error:', error);
+        throw new Error(error.message || 'Неизвестная ошибка');  // ✅ Исправлено
+      }
+    },
+
+    sellCrypto: async (userId, symbol, amount) => {  // ✅ Добавлен async
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/sell`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, symbol, amount })
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Ошибка продажи');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('API sellCrypto error:', error);
+        throw new Error(error.message || 'Неизвестная ошибка');  // ✅ Исправлено
+      }
+    },
+
+    getPrice: async (symbol) => {  // ✅ Добавлен async
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/price/${symbol}`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Ошибка получения цены');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('API getPrice error:', error);
+        throw new Error(error.message || 'Неизвестная ошибка');  // ✅ Исправлено
+      }
+    }
+  };
+  
   // Константа комиссии платформы (0.5%)
   const PLATFORM_FEE_PERCENTAGE = 0.005;
   
